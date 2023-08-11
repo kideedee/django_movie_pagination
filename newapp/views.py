@@ -7,7 +7,11 @@ from newapp.models import Movie
 def movie_list(request):
     movies = Movie.objects.all()
 
-    paginator = Paginator(movies, 1)
+    movie_name = request.GET.get('movie_name')
+    if movie_name != '' and movie_name is not None:
+        movies = movies.filter(name__icontains=movie_name)
+
+    paginator = Paginator(movies, 5)
     page = request.GET.get('page')
     movies = paginator.get_page(page)
 
